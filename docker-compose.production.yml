@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    env_file:
+      - .env
     environment:
       APP_HOST: financeit.i2r.tech
       APP_HOSTS: financeit.i2r.tech
