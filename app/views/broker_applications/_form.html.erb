@@ -1,0 +1,168 @@
+<%= form_with model: broker_application, class: "space-y-8" do |form| %>
+  <% if broker_application.errors.any? %>
+    <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-900">
+      <h2 class="font-semibold">Please correct the highlighted fields.</h2>
+      <ul class="mt-3 space-y-1">
+        <% broker_application.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6 flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-semibold text-slate-900">Application reference</h2>
+        <p class="mt-2 text-sm text-slate-600">Use the broker's deal reference so this submission can anchor later reconciliation work.</p>
+      </div>
+      <span class="rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">Deal identity</span>
+    </div>
+
+    <div>
+      <%= form.label :application_reference, class: "mb-2 block text-sm font-medium text-slate-700" %>
+      <%= form.text_field :application_reference, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200", placeholder: "AF-2026-00417" %>
+    </div>
+  </section>
+
+  <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6 flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-semibold text-slate-900">Applicant</h2>
+        <p class="mt-2 text-sm text-slate-600">Capture the customer details that downstream document checks will reconcile against.</p>
+      </div>
+      <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700">Customer</span>
+    </div>
+
+    <%= form.fields_for :broker_applicant do |applicant_fields| %>
+      <div class="grid gap-4 md:grid-cols-2">
+        <div>
+          <%= applicant_fields.label :first_name, class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= applicant_fields.text_field :first_name, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+
+        <div>
+          <%= applicant_fields.label :surname, class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= applicant_fields.text_field :surname, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+
+        <div>
+          <%= applicant_fields.label :date_of_birth, class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= applicant_fields.date_field :date_of_birth, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+
+        <div>
+          <%= applicant_fields.label :employment_status, class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= applicant_fields.select :employment_status, BrokerApplicant::EMPLOYMENT_STATUSES.map { |status| [status.humanize, status] }, { prompt: "Select employment status" }, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+
+        <div class="md:col-span-2">
+          <%= applicant_fields.label :address_line_1, "Address line 1", class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= applicant_fields.text_field :address_line_1, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200", placeholder: "14 Birchwood Lane" %>
+        </div>
+
+        <div>
+          <%= applicant_fields.label :city, "Town or city", class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= applicant_fields.text_field :city, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200", placeholder: "Solihull" %>
+        </div>
+
+        <div>
+          <%= applicant_fields.label :postcode, class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= applicant_fields.text_field :postcode, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm uppercase text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200", placeholder: "B91 3QR" %>
+        </div>
+
+        <div>
+          <%= applicant_fields.label :time_at_current_employer_years, "Time at current employer (years)", class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= applicant_fields.number_field :time_at_current_employer_years, min: 0, max: 80, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+      </div>
+    <% end %>
+  </section>
+
+  <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6 flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-semibold text-slate-900">Vehicle</h2>
+        <p class="mt-2 text-sm text-slate-600">Store the vehicle identifiers and valuation anchors the payout team will later compare across documents.</p>
+      </div>
+      <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700">Asset</span>
+    </div>
+
+    <%= form.fields_for :broker_vehicle do |vehicle_fields| %>
+      <div class="grid gap-4 md:grid-cols-2">
+        <div class="md:col-span-2">
+          <%= vehicle_fields.label :make_model, "Make / model", class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= vehicle_fields.text_field :make_model, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200", placeholder: "Ford Focus ST-Line" %>
+        </div>
+
+        <div>
+          <%= vehicle_fields.label :year, class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= vehicle_fields.number_field :year, min: 1900, max: Date.current.year + 1, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+
+        <div>
+          <%= vehicle_fields.label :registration, class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= vehicle_fields.text_field :registration, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm uppercase text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200", placeholder: "WR21XYZ" %>
+        </div>
+
+        <div>
+          <%= vehicle_fields.label :mileage, class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= vehicle_fields.number_field :mileage, min: 0, step: 1, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+      </div>
+    <% end %>
+  </section>
+
+  <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6 flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-semibold text-slate-900">Finance</h2>
+        <p class="mt-2 text-sm text-slate-600">Capture the figures that will later be reconciled against the agreement, invoice, and supplier paperwork.</p>
+      </div>
+      <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700">Figures</span>
+    </div>
+
+    <%= form.fields_for :broker_finance do |finance_fields| %>
+      <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div>
+          <%= finance_fields.label :cash_price, class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= finance_fields.number_field :cash_price, min: 0, step: 0.01, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+
+        <div>
+          <%= finance_fields.label :deposit, class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= finance_fields.number_field :deposit, min: 0, step: 0.01, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+
+        <div>
+          <%= finance_fields.label :amount_to_finance, class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= finance_fields.number_field :amount_to_finance, min: 0, step: 0.01, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+
+        <div>
+          <%= finance_fields.label :monthly_payment, class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= finance_fields.number_field :monthly_payment, min: 0, step: 0.01, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+
+        <div>
+          <%= finance_fields.label :total_amount_payable, class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= finance_fields.number_field :total_amount_payable, min: 0, step: 0.01, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+
+        <div>
+          <%= finance_fields.label :apr, "APR (%)", class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= finance_fields.number_field :apr, min: 0, max: 100, step: 0.01, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+
+        <div>
+          <%= finance_fields.label :glass_guide_retail_estimate, "Glass's Guide retail (estimated)", class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= finance_fields.number_field :glass_guide_retail_estimate, min: 0, step: 0.01, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+      </div>
+    <% end %>
+  </section>
+
+  <div class="flex justify-end">
+    <%= form.submit "Capture broker application", class: "inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800" %>
+  </div>
+<% end %>
