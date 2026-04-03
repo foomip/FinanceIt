@@ -87,6 +87,8 @@ Open `http://localhost:3000` and sign in with one of the seeded users:
 - `admin@financeit.local` / `password123`
 - `reviewer@financeit.local` / `password123`
 
+Production test url: https://financeit.i2r.tech
+
 ## Verification
 
 ```bash
