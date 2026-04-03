@@ -18,12 +18,13 @@ InsureIt is a Rails prototype for an internal motor finance reconciliation tool.
 
 ## What This Slice Builds
 
-This step focuses on the application shell rather than the reconciliation engine itself.
+This step focuses on broker application capture, which is the first structured input into the reconciliation workflow.
 
 - Devise authentication for internal users.
 - Initial user roles: `payout_reviewer` and `admin`.
-- An authenticated dashboard that anchors the rest of the prototype.
-- A clear definition of the app sections that the next steps will fill in.
+- A broker application capture flow covering applicant, vehicle, and finance details.
+- A dashboard that launches the intake workflow and surfaces recently captured applications.
+- A structured deal baseline that later reconciliation screens can compare against other documents.
 
 ## Proposed App Sections
 
@@ -39,18 +40,20 @@ This step focuses on the application shell rather than the reconciliation engine
 ## What I Deliberately Left Out
 
 - Document parsing and OCR.
+- Automated extraction from uploaded PDFs or scanned documents.
 - The field reconciliation engine itself.
 - FCA, HPI, and bank check integrations.
+- Editing, workflow states, and approval actions after initial capture.
 - A full permissions matrix beyond the initial role split.
 - Broker or dealer-facing workflows.
 
-These are the high-value next layers, but they depend on first having a stable authenticated shell and a clear product structure.
+These are the next high-value layers, but they depend on first having a reliable way to capture the originating broker submission as normalized data.
 
 ## If I Had More Time
 
-1. Build the deal queue with confidence-based prioritization and a minimal set of deal statuses.
-2. Implement the reconciliation workspace for one representative deal using the provided source documents.
-3. Add reviewer actions for approve, hold, and escalate with an audit timeline.
+1. Implement the reconciliation workspace for one representative deal using the provided source documents.
+2. Add document upload or ingestion so the broker application can be compared directly against the HP agreement, invoice, and mandate.
+3. Build reviewer actions for approve, hold, and escalate with an audit timeline.
 4. Introduce Pundit policies and tighter account provisioning once the user journeys are clearer.
 
 ## Local Setup
@@ -77,4 +80,4 @@ docker compose run --rm app bin/bundler-audit
 
 ## Current Status
 
-The repo currently implements authentication, roles, and the first authenticated landing page. The deal-processing workflow, reconciliation logic, and operational review tools are still to be built in the next steps.
+The repo currently implements authentication, roles, broker application capture, and a dashboard entry point into that workflow. The reconciliation engine, document comparisons, exception handling, and operational decisioning tools are still to be built in the next steps.
