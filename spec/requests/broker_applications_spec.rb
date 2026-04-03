@@ -85,6 +85,7 @@ RSpec.describe 'BrokerApplications', type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include('Broker Application Captured')
       expect(response.body).to include('Adam Piers')
+      expect(response.body).to include('Start HP agreement')
     end
 
     it 're-renders the form when nested values are invalid' do

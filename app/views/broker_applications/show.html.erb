@@ -1,4 +1,10 @@
 <section class="space-y-8">
+  <% hp_agreement_status_classes = if @broker_application.broker_hp_agreement.present?
+    "border-emerald-200 bg-emerald-50 text-emerald-900"
+  else
+    "border-amber-200 bg-amber-50 text-amber-900"
+  end %>
+
   <div class="rounded-3xl border border-emerald-200 bg-emerald-50 px-8 py-8 shadow-sm">
     <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
       <div>
@@ -9,10 +15,30 @@
 
       <div class="flex gap-3">
         <%= link_to "Capture another", new_broker_application_path, class: "inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800" %>
+        <% if @broker_application.broker_hp_agreement.present? %>
+          <%= link_to "View HP agreement", broker_application_hp_agreement_path(@broker_application), class: "inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900" %>
+        <% else %>
+          <%= link_to "Start HP agreement", new_broker_application_hp_agreement_path(@broker_application), class: "inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900" %>
+        <% end %>
         <%= link_to "Return to dashboard", dashboard_path, class: "inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900" %>
       </div>
     </div>
   </div>
+
+  <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-[0.18em] text-sky-700">Next step</p>
+        <h2 class="mt-2 text-2xl font-semibold text-slate-900">Prepare the HP agreement without re-entering the baseline deal data.</h2>
+        <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">The agreement step pulls the customer, vehicle, and core finance fields from this broker application, then asks only for agreement-specific details that are not already captured.</p>
+      </div>
+
+      <div class="rounded-2xl border <%= hp_agreement_status_classes %> px-5 py-4 text-sm">
+        <p class="font-semibold"><%= @broker_application.broker_hp_agreement.present? ? 'HP agreement prepared' : 'HP agreement still needed' %></p>
+        <p class="mt-2"><%= @broker_application.broker_hp_agreement.present? ? 'This deal already has the follow-on agreement snapshot ready for later checks.' : 'Start the next step to add term and first payment date while carrying the shared deal fields forward automatically.' %></p>
+      </div>
+    </div>
+  </section>
 
   <div class="grid gap-6 xl:grid-cols-3">
     <article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">

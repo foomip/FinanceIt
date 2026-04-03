@@ -1,0 +1,109 @@
+<%= form_with model: [broker_application, broker_hp_agreement], url: broker_application_hp_agreement_path(broker_application), class: "space-y-8" do |form| %>
+  <% if broker_hp_agreement.errors.any? %>
+    <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-900">
+      <h2 class="font-semibold">Please correct the highlighted fields.</h2>
+      <ul class="mt-3 space-y-1">
+        <% broker_hp_agreement.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6 flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-semibold text-slate-900">Reuse the broker application baseline</h2>
+        <p class="mt-2 text-sm text-slate-600">These fields already exist from the originating broker application, so the HP agreement step carries them forward automatically instead of asking the user to key them again.</p>
+      </div>
+      <span class="rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">Reused data</span>
+    </div>
+
+    <div class="grid gap-6 xl:grid-cols-3">
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+        <h3 class="text-lg font-semibold text-slate-900">Customer</h3>
+        <dl class="mt-4 space-y-3 text-sm text-slate-600">
+          <div>
+            <dt class="font-medium text-slate-900">Full name</dt>
+            <dd class="mt-1"><%= broker_application.applicant_full_name %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Date of birth</dt>
+            <dd class="mt-1"><%= broker_application.broker_applicant.date_of_birth.strftime("%d/%m/%Y") %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Address</dt>
+            <dd class="mt-1"><%= broker_application.applicant_address %></dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+        <h3 class="text-lg font-semibold text-slate-900">Vehicle</h3>
+        <dl class="mt-4 space-y-3 text-sm text-slate-600">
+          <div>
+            <dt class="font-medium text-slate-900">Make / model</dt>
+            <dd class="mt-1"><%= broker_application.broker_vehicle.make_model %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Year</dt>
+            <dd class="mt-1"><%= broker_application.broker_vehicle.year %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Registration</dt>
+            <dd class="mt-1"><%= broker_application.broker_vehicle.registration %></dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+        <h3 class="text-lg font-semibold text-slate-900">Finance</h3>
+        <dl class="mt-4 space-y-3 text-sm text-slate-600">
+          <div>
+            <dt class="font-medium text-slate-900">Cash price</dt>
+            <dd class="mt-1"><%= number_to_currency(broker_application.broker_finance.cash_price) %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Advance</dt>
+            <dd class="mt-1"><%= number_to_currency(broker_application.broker_finance.amount_to_finance) %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Monthly payment</dt>
+            <dd class="mt-1"><%= number_to_currency(broker_application.broker_finance.monthly_payment) %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">APR</dt>
+            <dd class="mt-1"><%= number_with_precision(broker_application.broker_finance.apr, precision: 2) %>%</dd>
+          </div>
+        </dl>
+      </article>
+    </div>
+  </section>
+
+  <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6 flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-semibold text-slate-900">Agreement-only details</h2>
+        <p class="mt-2 text-sm text-slate-600">Capture only the values that are specific to the HP agreement and not already present in the broker application.</p>
+      </div>
+      <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700">Minimal input</span>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      <div>
+        <%= form.label :term_months, "Term (months)", class: "mb-2 block text-sm font-medium text-slate-700" %>
+        <%= form.number_field :term_months, min: 1, max: 120, step: 1, value: broker_hp_agreement.term_months || 48, class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+      </div>
+
+      <div>
+        <%= form.label :first_payment_date, class: "mb-2 block text-sm font-medium text-slate-700" %>
+        <%= form.date_field :first_payment_date, value: broker_hp_agreement.first_payment_date || Date.new(2026, 5, 1), class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+      </div>
+    </div>
+  </section>
+
+  <div class="flex justify-end gap-3">
+    <%= link_to "Back to application", broker_application_path(broker_application), class: "inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900" %>
+    <%= form.submit "Prepare HP agreement", class: "inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800" %>
+  </div>
+<% end %>

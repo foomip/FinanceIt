@@ -1,0 +1,102 @@
+<section class="space-y-8">
+  <div class="rounded-3xl border border-emerald-200 bg-emerald-50 px-8 py-8 shadow-sm">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">HP Agreement Prepared</p>
+        <h1 class="mt-2 text-4xl font-semibold tracking-tight text-slate-900"><%= @broker_application.application_reference %></h1>
+        <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-700">The agreement snapshot is ready for later reconciliation work. Shared fields were carried over from the broker application, and only the agreement-only inputs were captured here.</p>
+      </div>
+
+      <div class="flex gap-3">
+        <%= link_to "View application", broker_application_path(@broker_application), class: "inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900" %>
+        <%= link_to "Return to dashboard", dashboard_path, class: "inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800" %>
+      </div>
+    </div>
+  </div>
+
+  <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6 flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-semibold text-slate-900">Baseline reuse summary</h2>
+        <p class="mt-2 text-sm text-slate-600">These values were copied from the initial broker application so later screens can compare the agreement snapshot against other document sources.</p>
+      </div>
+      <span class="rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">Seeded from intake</span>
+    </div>
+
+    <div class="grid gap-6 xl:grid-cols-3">
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+        <h3 class="text-lg font-semibold text-slate-900">Customer</h3>
+        <dl class="mt-4 space-y-3 text-sm text-slate-600">
+          <div>
+            <dt class="font-medium text-slate-900">Full name</dt>
+            <dd class="mt-1"><%= @broker_hp_agreement.full_name %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Date of birth</dt>
+            <dd class="mt-1"><%= @broker_hp_agreement.date_of_birth.strftime("%d/%m/%Y") %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Address</dt>
+            <dd class="mt-1"><%= @broker_hp_agreement.address %></dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+        <h3 class="text-lg font-semibold text-slate-900">Vehicle</h3>
+        <dl class="mt-4 space-y-3 text-sm text-slate-600">
+          <div>
+            <dt class="font-medium text-slate-900">Make / model</dt>
+            <dd class="mt-1"><%= @broker_hp_agreement.make_model %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Year</dt>
+            <dd class="mt-1"><%= @broker_hp_agreement.vehicle_year %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Registration</dt>
+            <dd class="mt-1"><%= @broker_hp_agreement.registration %></dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+        <h3 class="text-lg font-semibold text-slate-900">Agreement terms</h3>
+        <dl class="mt-4 space-y-3 text-sm text-slate-600">
+          <div>
+            <dt class="font-medium text-slate-900">Cash price</dt>
+            <dd class="mt-1"><%= number_to_currency(@broker_hp_agreement.cash_price) %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Deposit</dt>
+            <dd class="mt-1"><%= number_to_currency(@broker_hp_agreement.deposit) %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Advance</dt>
+            <dd class="mt-1"><%= number_to_currency(@broker_hp_agreement.advance_amount) %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Monthly payment</dt>
+            <dd class="mt-1"><%= number_to_currency(@broker_hp_agreement.monthly_payment) %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Total amount payable</dt>
+            <dd class="mt-1"><%= number_to_currency(@broker_hp_agreement.total_amount_payable) %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">APR</dt>
+            <dd class="mt-1"><%= number_with_precision(@broker_hp_agreement.apr, precision: 2) %>%</dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Term</dt>
+            <dd class="mt-1"><%= pluralize(@broker_hp_agreement.term_months, "month") %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">First payment date</dt>
+            <dd class="mt-1"><%= @broker_hp_agreement.first_payment_date.strftime("%d/%m/%Y") %></dd>
+          </div>
+        </dl>
+      </article>
+    </div>
+  </section>
+</section>
