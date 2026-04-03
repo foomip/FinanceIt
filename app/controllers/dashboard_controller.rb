@@ -1,15 +1,19 @@
 class DashboardController < ApplicationController
   def index
+    @recent_broker_applications = BrokerApplication.includes(:broker_applicant, :broker_vehicle)
+      .order(created_at: :desc)
+      .limit(5)
+
     @sections = [
       {
-        title: "Deal queue",
-        summary: "Start with the highest-confidence deals so reviewers spend time only where the engine finds risk or ambiguity.",
-        status: "Next"
+        title: "Broker application capture",
+        summary: "Capture the originating deal data in a structured format so later reconciliation stages compare trusted fields instead of raw documents.",
+        status: "Live"
       },
       {
         title: "Reconciliation workspace",
         summary: "Compare source values, understand mismatches, and confirm whether a discrepancy blocks payout.",
-        status: "Planned"
+        status: "Next"
       },
       {
         title: "Exceptions and escalation",
