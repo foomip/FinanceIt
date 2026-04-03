@@ -5,6 +5,9 @@
 - Keep server-side work in standard Rails locations under `app/`; keep frontend behavior in Stimulus controllers under `app/javascript/controllers`.
 - Production is Docker-first and Kamal-managed. Check `Dockerfile` and `config/deploy.yml` before changing runtime, deployment, ports, volumes, or environment variables.
 - The app uses Solid Queue, Solid Cache, and Solid Cable. Production database wiring is multi-database SQLite; review `config/database.yml`, `config/queue.yml`, `config/cache.yml`, and `config/cable.yml` before changing persistence or background job behavior.
+- This app uses rspec for all tests.
+- This app uses LightService for organizing complex business logic.
+- Pundit is used for authorization.
 
 ## Build And Test
 - Initial setup: `docker compose run --rm app bin/setup` (installs gems, sets up DB, seeds)
