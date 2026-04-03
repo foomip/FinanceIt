@@ -1,0 +1,237 @@
+<%= form_with model: [broker_application, broker_purchase_invoice], url: broker_application_purchase_invoice_path(broker_application), class: 'space-y-8' do |form| %>
+  <% if broker_purchase_invoice.errors.any? %>
+    <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-900">
+      <h2 class="font-semibold">Please correct the highlighted fields.</h2>
+      <ul class="mt-3 space-y-1">
+        <% broker_purchase_invoice.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6 flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-semibold text-slate-900">Context from earlier steps</h2>
+        <p class="mt-2 text-sm text-slate-600">Keep the intake and agreement baseline in view, then enter the invoice exactly as supplied by the dealer where it differs.</p>
+      </div>
+      <span class="rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">Trusted context</span>
+    </div>
+
+    <div class="grid gap-6 xl:grid-cols-3">
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+        <h3 class="text-lg font-semibold text-slate-900">Broker application</h3>
+        <dl class="mt-4 space-y-3 text-sm text-slate-600">
+          <div>
+            <dt class="font-medium text-slate-900">Customer</dt>
+            <dd class="mt-1"><%= broker_application.applicant_full_name %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Address</dt>
+            <dd class="mt-1"><%= broker_application.applicant_address %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Vehicle</dt>
+            <dd class="mt-1"><%= broker_application.vehicle_label %></dd>
+          </div>
+          <div>
+            <dt class="font-medium text-slate-900">Cash price</dt>
+            <dd class="mt-1"><%= number_to_currency(broker_application.broker_finance.cash_price) %></dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+        <h3 class="text-lg font-semibold text-slate-900">HP agreement</h3>
+        <% if broker_application.broker_hp_agreement.present? %>
+          <dl class="mt-4 space-y-3 text-sm text-slate-600">
+            <div>
+              <dt class="font-medium text-slate-900">Term</dt>
+              <dd class="mt-1"><%= pluralize(broker_application.broker_hp_agreement.term_months, 'month') %></dd>
+            </div>
+            <div>
+              <dt class="font-medium text-slate-900">First payment date</dt>
+              <dd class="mt-1"><%= broker_application.broker_hp_agreement.first_payment_date.strftime('%d/%m/%Y') %></dd>
+            </div>
+            <div>
+              <dt class="font-medium text-slate-900">Advance</dt>
+              <dd class="mt-1"><%= number_to_currency(broker_application.broker_hp_agreement.advance_amount) %></dd>
+            </div>
+            <div>
+              <dt class="font-medium text-slate-900">APR</dt>
+              <dd class="mt-1"><%= number_with_precision(broker_application.broker_hp_agreement.apr, precision: 2) %>%</dd>
+            </div>
+          </dl>
+        <% else %>
+          <p class="mt-4 text-sm text-slate-600">Prepare the HP agreement first to keep the document chain consistent.</p>
+        <% end %>
+      </article>
+
+      <article class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+        <h3 class="text-lg font-semibold text-slate-900">Capture intent</h3>
+        <p class="mt-4 text-sm leading-6 text-slate-600">Use the invoice's own wording and figures where the dealer document differs from intake. This prototype saves the invoice as a separate source snapshot rather than collapsing everything into one “final” value.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6 flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-semibold text-slate-900">Invoice header</h2>
+        <p class="mt-2 text-sm text-slate-600">Record the supplier, invoice reference, date, and who the invoice is addressed to.</p>
+      </div>
+      <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700">Document metadata</span>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      <div>
+        <%= form.label :supplier_name, 'From', class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.text_field :supplier_name, value: broker_purchase_invoice.supplier_name || 'Midland Cars Direct', class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+
+      <div>
+        <%= form.label :invoice_number, class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.text_field :invoice_number, value: broker_purchase_invoice.invoice_number || 'MCD-2026-0892', class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+
+      <div>
+        <%= form.label :invoice_date, class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.date_field :invoice_date, value: broker_purchase_invoice.invoice_date || Date.new(2026, 3, 19), class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+
+      <div>
+        <%= form.label :addressed_to, 'Addressed to', class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.text_field :addressed_to, value: broker_purchase_invoice.addressed_to || broker_purchase_invoice.finance_company || 'Northgate Motor Finance Ltd', class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+    </div>
+  </section>
+
+  <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6 flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-semibold text-slate-900">Customer</h2>
+        <p class="mt-2 text-sm text-slate-600">Capture the name and address exactly as shown on the dealer invoice.</p>
+      </div>
+      <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700">Customer</span>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      <div class="md:col-span-2">
+        <%= form.label :customer_name, 'Customer name', class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.text_field :customer_name, value: broker_purchase_invoice.customer_name || 'A J Piers', class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+
+      <div class="md:col-span-2">
+        <%= form.label :address_line_1, 'Address line 1', class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.text_field :address_line_1, value: broker_purchase_invoice.address_line_1 || '14 Birchwood Ln', class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+
+      <div>
+        <%= form.label :city, 'Town or city', class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.text_field :city, class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+
+      <div>
+        <%= form.label :postcode, class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.text_field :postcode, class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm uppercase text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+    </div>
+  </section>
+
+  <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6 flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-semibold text-slate-900">Vehicle</h2>
+        <p class="mt-2 text-sm text-slate-600">Store the vehicle details from the invoice, including the dealer-reported mileage at sale.</p>
+      </div>
+      <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700">Vehicle</span>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      <div class="md:col-span-2">
+        <%= form.label :make_model, 'Make / model', class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.text_field :make_model, class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+
+      <div>
+        <%= form.label :registration, class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.text_field :registration, value: broker_purchase_invoice.registration || 'WR21 XYZ', class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm uppercase text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+
+      <div>
+        <%= form.label :mileage_at_sale, 'Mileage at sale', class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.number_field :mileage_at_sale, min: 0, step: 1, value: broker_purchase_invoice.mileage_at_sale || 28_400, class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+    </div>
+  </section>
+
+  <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6 flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-semibold text-slate-900">Pricing</h2>
+        <p class="mt-2 text-sm text-slate-600">Break the invoice into the dealer's pricing lines so later checks can distinguish the vehicle price from added fees.</p>
+      </div>
+      <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700">Pricing lines</span>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div>
+        <%= form.label :vehicle_price, 'Vehicle price', class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.number_field :vehicle_price, min: 0, step: 0.01, value: broker_purchase_invoice.vehicle_price || 14_000, class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+
+      <div>
+        <%= form.label :administration_fee, 'Administration fee', class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.number_field :administration_fee, min: 0, step: 0.01, value: broker_purchase_invoice.administration_fee || 295, class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+
+      <div>
+        <%= form.label :delivery_charge, class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.number_field :delivery_charge, min: 0, step: 0.01, value: broker_purchase_invoice.delivery_charge || 150, class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+
+      <div>
+        <%= form.label :invoice_total, class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.number_field :invoice_total, min: 0, step: 0.01, value: broker_purchase_invoice.invoice_total || 14_445, class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+    </div>
+  </section>
+
+  <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6 flex items-start justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-semibold text-slate-900">Finance and VAT</h2>
+        <p class="mt-2 text-sm text-slate-600">Capture the invoice's finance split and the dealer's VAT note exactly as supplied.</p>
+      </div>
+      <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700">Finance</span>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      <div>
+        <%= form.label :deposit_received, 'Deposit received', class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.number_field :deposit_received, min: 0, step: 0.01, class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+
+      <div>
+        <%= form.label :amount_to_finance, class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.number_field :amount_to_finance, min: 0, step: 0.01, class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+
+      <div class="md:col-span-2">
+        <%= form.label :finance_company, class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.text_field :finance_company, value: broker_purchase_invoice.finance_company || 'Northgate Motor Finance Ltd', class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+
+      <div class="md:col-span-2">
+        <%= form.label :vat_note, 'VAT', class: 'mb-2 block text-sm font-medium text-slate-700' %>
+        <%= form.text_area :vat_note, rows: 3, value: broker_purchase_invoice.vat_note || 'No VAT charged. Seller is not VAT registered.', class: 'w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200' %>
+      </div>
+    </div>
+  </section>
+
+  <div class="flex justify-end gap-3">
+    <%= link_to 'Back to HP agreement', broker_application_hp_agreement_path(broker_application), class: 'inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900' %>
+    <%= form.submit 'Capture purchase invoice', class: 'inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800' %>
+  </div>
+<% end %>

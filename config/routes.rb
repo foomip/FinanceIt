@@ -23,5 +23,6 @@ Rails.application.routes.draw do
 
   resources :broker_applications, only: %i[new create show] do
     resource :hp_agreement, only: %i[new create show], controller: :broker_hp_agreements
+    resource :purchase_invoice, only: %i[new create show], controller: :broker_purchase_invoices
   end
 end

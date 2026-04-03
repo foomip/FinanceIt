@@ -27,7 +27,7 @@ class BrokerHpAgreementsController < ApplicationController
   private
 
   def set_broker_application
-    @broker_application = BrokerApplication.includes(:broker_applicant, :broker_vehicle, :broker_finance, :broker_hp_agreement).find(params[:broker_application_id])
+    @broker_application = BrokerApplication.includes(:broker_applicant, :broker_vehicle, :broker_finance, :broker_hp_agreement, :broker_purchase_invoice).find(params[:broker_application_id])
   end
 
   def set_broker_hp_agreement

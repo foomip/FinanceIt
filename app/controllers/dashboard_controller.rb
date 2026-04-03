@@ -1,9 +1,10 @@
 class DashboardController < ApplicationController
   def index
-    @recent_broker_applications = BrokerApplication.includes(:broker_applicant, :broker_vehicle, :broker_hp_agreement)
+    @recent_broker_applications = BrokerApplication.includes(:broker_applicant, :broker_vehicle, :broker_hp_agreement, :broker_purchase_invoice)
       .order(created_at: :desc)
       .limit(5)
     @captured_hp_agreements_count = BrokerHpAgreement.count
+    @captured_purchase_invoices_count = BrokerPurchaseInvoice.count
 
     @sections = [
       {
@@ -12,8 +13,8 @@ class DashboardController < ApplicationController
         status: "Live"
       },
       {
-        title: "Reconciliation workspace",
-        summary: "Reuse the broker application as the baseline, add HP agreement details without re-keying shared fields, and prepare the deal for field-by-field checks.",
+        title: "Document snapshots",
+        summary: "Reuse the broker application baseline, prepare the HP agreement, and now capture the dealer purchase invoice as a second downstream source for later field reconciliation.",
         status: "Live"
       },
       {

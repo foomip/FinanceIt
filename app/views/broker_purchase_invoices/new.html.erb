@@ -1,0 +1,20 @@
+<section class="space-y-8">
+  <div class="rounded-3xl border border-slate-200 bg-white px-8 py-10 shadow-sm">
+    <div class="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
+      <div class="max-w-3xl space-y-4">
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">Purchase Invoice</p>
+        <div class="space-y-3">
+          <h1 class="text-4xl font-semibold tracking-tight text-slate-900">Capture the dealer invoice as the next document snapshot.</h1>
+          <p class="text-lg text-slate-600">This screen follows the HP agreement and records the dealer's own wording, pricing lines, and finance details. Earlier steps stay visible so the user can move quickly without losing context.</p>
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-sky-100 bg-sky-50 px-5 py-4 text-sm text-slate-700 xl:max-w-sm">
+        <p class="font-semibold text-slate-900">Why this matters</p>
+        <p class="mt-2">The invoice is where dealer-supplied names, addresses, pricing, and fees start to diverge. Capturing those values cleanly is the next step toward reducing manual payout checks.</p>
+      </div>
+    </div>
+  </div>
+
+  <%= render 'form', broker_application: @broker_application, broker_purchase_invoice: @broker_purchase_invoice %>
+</section>

@@ -5,6 +5,7 @@ class BrokerApplication < ApplicationRecord
   has_one :broker_vehicle, dependent: :destroy, inverse_of: :broker_application
   has_one :broker_finance, dependent: :destroy, inverse_of: :broker_application
   has_one :broker_hp_agreement, dependent: :destroy, inverse_of: :broker_application
+  has_one :broker_purchase_invoice, dependent: :destroy, inverse_of: :broker_application
 
   accepts_nested_attributes_for :broker_applicant
   accepts_nested_attributes_for :broker_vehicle
@@ -44,6 +45,29 @@ class BrokerApplication < ApplicationRecord
       monthly_payment: broker_finance.monthly_payment,
       total_amount_payable: broker_finance.total_amount_payable,
       apr: broker_finance.apr
+    }
+  end
+
+  def purchase_invoice_default_attributes
+    return {} unless broker_applicant && broker_vehicle && broker_finance
+
+    source_name = broker_hp_agreement&.full_name.presence || applicant_full_name
+    source_address_line_1 = broker_hp_agreement&.address_line_1.presence || broker_applicant.address_line_1
+    source_city = broker_hp_agreement&.city.presence || broker_applicant.city
+    source_postcode = broker_hp_agreement&.postcode.presence || broker_applicant.postcode
+    source_registration = broker_hp_agreement&.registration.presence || broker_vehicle.registration
+
+    {
+      customer_name: source_name,
+      address_line_1: source_address_line_1,
+      city: source_city,
+      postcode: source_postcode,
+      make_model: broker_vehicle.make_model,
+      registration: source_registration,
+      mileage_at_sale: broker_vehicle.mileage,
+      vehicle_price: broker_finance.cash_price,
+      deposit_received: broker_finance.deposit,
+      amount_to_finance: broker_finance.amount_to_finance
     }
   end
 end

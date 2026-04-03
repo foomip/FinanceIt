@@ -9,10 +9,30 @@
 
       <div class="flex gap-3">
         <%= link_to "View application", broker_application_path(@broker_application), class: "inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900" %>
+        <% if @broker_application.broker_purchase_invoice.present? %>
+          <%= link_to "View purchase invoice", broker_application_purchase_invoice_path(@broker_application), class: "inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900" %>
+        <% else %>
+          <%= link_to "Start purchase invoice", new_broker_application_purchase_invoice_path(@broker_application), class: "inline-flex items-center justify-center rounded-full border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900" %>
+        <% end %>
         <%= link_to "Return to dashboard", dashboard_path, class: "inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800" %>
       </div>
     </div>
   </div>
+
+  <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-[0.18em] text-sky-700">Next step</p>
+        <h2 class="mt-2 text-2xl font-semibold text-slate-900">Capture the dealer purchase invoice as the next source document.</h2>
+        <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-600">The invoice step should feel familiar: shared deal context stays visible, but the user records the dealer's own wording and pricing lines exactly as they appear on the invoice.</p>
+      </div>
+
+      <div class="rounded-2xl border <%= @broker_application.broker_purchase_invoice.present? ? 'border-emerald-200 bg-emerald-50 text-emerald-900' : 'border-sky-200 bg-sky-50 text-sky-900' %> px-5 py-4 text-sm lg:max-w-sm">
+        <p class="font-semibold"><%= @broker_application.broker_purchase_invoice.present? ? 'Purchase invoice captured' : 'Purchase invoice ready' %></p>
+        <p class="mt-2"><%= @broker_application.broker_purchase_invoice.present? ? 'The dealer invoice snapshot is already linked to this deal.' : 'Move straight into the dealer invoice without re-entering the full customer, vehicle, and finance baseline.' %></p>
+      </div>
+    </div>
+  </section>
 
   <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
     <div class="mb-6 flex items-start justify-between gap-4">

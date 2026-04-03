@@ -5,7 +5,7 @@
         <p class="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">FinanceIt Prototype</p>
         <div class="space-y-3">
           <h1 class="text-4xl font-semibold tracking-tight text-slate-900">Start with structured intake, then automate everything after it.</h1>
-          <p class="text-lg text-slate-600">The live prototype now covers structured intake plus an HP agreement step that reuses the captured deal baseline. That keeps data entry light and moves the user closer to a document-by-document reconciliation workspace.</p>
+          <p class="text-lg text-slate-600">The live prototype now covers structured intake plus two downstream document steps: an HP agreement snapshot and a purchase invoice snapshot. That keeps data entry light while building the source-to-source comparisons needed for later reconciliation.</p>
         </div>
 
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -33,6 +33,12 @@
           <p class="font-semibold text-slate-900">HP agreements prepared</p>
           <p class="mt-2 text-3xl font-semibold text-emerald-700"><%= @captured_hp_agreements_count %></p>
           <p class="mt-2">Each agreement reuses the original application data and only asks for agreement-only fields.</p>
+        </div>
+
+        <div class="rounded-2xl border border-amber-100 bg-amber-50 px-5 py-4 text-sm text-slate-700">
+          <p class="font-semibold text-slate-900">Purchase invoices captured</p>
+          <p class="mt-2 text-3xl font-semibold text-amber-700"><%= @captured_purchase_invoices_count %></p>
+          <p class="mt-2">Each invoice preserves the dealer's document values while still reusing prior-step context to keep capture fast.</p>
         </div>
       </aside>
     </div>
@@ -68,8 +74,10 @@
                 <div>
                   <div class="flex flex-wrap items-center gap-3">
                     <p class="text-sm font-semibold uppercase tracking-[0.18em] text-sky-700"><%= broker_application.application_reference %></p>
-                    <% if broker_application.broker_hp_agreement.present? %>
-                      <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-800">HP agreement ready</span>
+                    <% if broker_application.broker_purchase_invoice.present? %>
+                      <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-800">Purchase invoice ready</span>
+                    <% elsif broker_application.broker_hp_agreement.present? %>
+                      <span class="rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-sky-800">Needs purchase invoice</span>
                     <% else %>
                       <span class="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-amber-800">Needs HP agreement</span>
                     <% end %>
@@ -84,8 +92,11 @@
                   </div>
                   <div class="flex flex-wrap gap-3">
                     <%= link_to "View intake", broker_application_path(broker_application), class: "inline-flex items-center justify-center rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900" %>
-                    <% if broker_application.broker_hp_agreement.present? %>
-                      <%= link_to "View HP agreement", broker_application_hp_agreement_path(broker_application), class: "inline-flex items-center justify-center rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800" %>
+                    <% if broker_application.broker_purchase_invoice.present? %>
+                      <%= link_to "View purchase invoice", broker_application_purchase_invoice_path(broker_application), class: "inline-flex items-center justify-center rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800" %>
+                    <% elsif broker_application.broker_hp_agreement.present? %>
+                      <%= link_to "View HP agreement", broker_application_hp_agreement_path(broker_application), class: "inline-flex items-center justify-center rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900" %>
+                      <%= link_to "Start purchase invoice", new_broker_application_purchase_invoice_path(broker_application), class: "inline-flex items-center justify-center rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800" %>
                     <% else %>
                       <%= link_to "Start HP agreement", new_broker_application_hp_agreement_path(broker_application), class: "inline-flex items-center justify-center rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800" %>
                     <% end %>

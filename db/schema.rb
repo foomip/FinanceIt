@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_03_110000) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_03_111500) do
   create_table "broker_applicants", force: :cascade do |t|
     t.string "address_line_1", null: false
     t.integer "broker_application_id", null: false
@@ -71,6 +71,33 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_03_110000) do
     t.index ["registration"], name: "index_broker_hp_agreements_on_registration"
   end
 
+  create_table "broker_purchase_invoices", force: :cascade do |t|
+    t.string "address_line_1", null: false
+    t.string "addressed_to", null: false
+    t.decimal "administration_fee", precision: 10, scale: 2, null: false
+    t.decimal "amount_to_finance", precision: 10, scale: 2, null: false
+    t.integer "broker_application_id", null: false
+    t.string "city", null: false
+    t.datetime "created_at", null: false
+    t.string "customer_name", null: false
+    t.decimal "delivery_charge", precision: 10, scale: 2, null: false
+    t.decimal "deposit_received", precision: 10, scale: 2, null: false
+    t.string "finance_company", null: false
+    t.date "invoice_date", null: false
+    t.string "invoice_number", null: false
+    t.decimal "invoice_total", precision: 10, scale: 2, null: false
+    t.string "make_model", null: false
+    t.integer "mileage_at_sale", null: false
+    t.string "postcode", null: false
+    t.string "registration", null: false
+    t.string "supplier_name", null: false
+    t.datetime "updated_at", null: false
+    t.string "vat_note", null: false
+    t.decimal "vehicle_price", precision: 10, scale: 2, null: false
+    t.index ["broker_application_id"], name: "index_broker_purchase_invoices_on_broker_application_id", unique: true
+    t.index ["registration"], name: "index_broker_purchase_invoices_on_registration"
+  end
+
   create_table "broker_vehicles", force: :cascade do |t|
     t.integer "broker_application_id", null: false
     t.datetime "created_at", null: false
@@ -99,5 +126,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_03_110000) do
   add_foreign_key "broker_applicants", "broker_applications"
   add_foreign_key "broker_finances", "broker_applications"
   add_foreign_key "broker_hp_agreements", "broker_applications"
+  add_foreign_key "broker_purchase_invoices", "broker_applications"
   add_foreign_key "broker_vehicles", "broker_applications"
 end

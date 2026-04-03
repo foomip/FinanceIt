@@ -49,6 +49,7 @@ RSpec.describe 'Dashboard', type: :request do
       expect(response.body).to include('Capture broker application')
       expect(response.body).to include('Broker application capture')
       expect(response.body).to include('HP agreements prepared')
+      expect(response.body).to include('Purchase invoices captured')
     end
 
     it 'shows recent broker applications when present' do
