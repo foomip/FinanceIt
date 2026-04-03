@@ -24,6 +24,7 @@ services:
       sh -lc "bundle check || bundle install &&
       if ! gem list foreman -i --silent; then gem install foreman; fi &&
       bin/rails db:prepare &&
+      bin/rails db:seed &&
       /usr/local/bundle/bin/foreman start -f Procfile.dev"
     environment:
       BINDING: 0.0.0.0
