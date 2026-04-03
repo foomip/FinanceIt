@@ -20,4 +20,6 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   get "dashboard" => "dashboard#index", as: :dashboard
+
+  resources :broker_applications, only: %i[new create show]
 end
