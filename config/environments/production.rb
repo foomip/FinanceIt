@@ -2,7 +2,9 @@ require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
   configured_hosts = ENV.fetch("APP_HOSTS", "").split(",").map(&:strip).reject(&:empty?)
-  primary_host = configured_hosts.first || ENV["APP_HOST"]
+  primary_host     = configured_hosts.first || ENV["APP_HOST"]
+  assume_ssl       = ENV.fetch("RAILS_ASSUME_SSL", "true") == "true"
+  force_ssl        = ENV.fetch("RAILS_FORCE_SSL", "true") == "true"
 
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -28,10 +30,10 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
-  # config.assume_ssl = true
+  config.assume_ssl = assume_ssl
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = force_ssl
 
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
@@ -61,7 +63,10 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: primary_host || "example.com" }
+  config.action_mailer.default_url_options = {
+    host: primary_host || "example.com",
+    protocol: force_ssl ? "https" : "http"
+  }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
   # config.action_mailer.smtp_settings = {
