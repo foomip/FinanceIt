@@ -22,7 +22,7 @@ class BrokerApplicationsController < ApplicationController
   private
 
   def set_broker_application
-    @broker_application = BrokerApplication.includes(:broker_applicant, :broker_vehicle, :broker_finance).find(params[:id])
+    @broker_application = BrokerApplication.includes(:broker_applicant, :broker_vehicle, :broker_finance, :broker_hp_agreement).find(params[:id])
   end
 
   def build_nested_records
