@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_03_100300) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_03_110000) do
   create_table "broker_applicants", force: :cascade do |t|
     t.string "address_line_1", null: false
     t.integer "broker_application_id", null: false
@@ -47,6 +47,30 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_03_100300) do
     t.index ["broker_application_id"], name: "index_broker_finances_on_broker_application_id", unique: true
   end
 
+  create_table "broker_hp_agreements", force: :cascade do |t|
+    t.string "address_line_1", null: false
+    t.decimal "advance_amount", precision: 10, scale: 2, null: false
+    t.decimal "apr", precision: 5, scale: 2, null: false
+    t.integer "broker_application_id", null: false
+    t.decimal "cash_price", precision: 10, scale: 2, null: false
+    t.string "city", null: false
+    t.datetime "created_at", null: false
+    t.date "date_of_birth", null: false
+    t.decimal "deposit", precision: 10, scale: 2, null: false
+    t.date "first_payment_date", null: false
+    t.string "full_name", null: false
+    t.string "make_model", null: false
+    t.decimal "monthly_payment", precision: 10, scale: 2, null: false
+    t.string "postcode", null: false
+    t.string "registration", null: false
+    t.integer "term_months", null: false
+    t.decimal "total_amount_payable", precision: 10, scale: 2, null: false
+    t.datetime "updated_at", null: false
+    t.integer "vehicle_year", null: false
+    t.index ["broker_application_id"], name: "index_broker_hp_agreements_on_broker_application_id", unique: true
+    t.index ["registration"], name: "index_broker_hp_agreements_on_registration"
+  end
+
   create_table "broker_vehicles", force: :cascade do |t|
     t.integer "broker_application_id", null: false
     t.datetime "created_at", null: false
@@ -74,5 +98,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_03_100300) do
 
   add_foreign_key "broker_applicants", "broker_applications"
   add_foreign_key "broker_finances", "broker_applications"
+  add_foreign_key "broker_hp_agreements", "broker_applications"
   add_foreign_key "broker_vehicles", "broker_applications"
 end
