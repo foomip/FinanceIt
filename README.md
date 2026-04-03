@@ -18,13 +18,14 @@ InsureIt is a Rails prototype for an internal motor finance reconciliation tool.
 
 ## What This Slice Builds
 
-This step focuses on broker application capture, which is the first structured input into the reconciliation workflow.
+This prototype now covers two connected steps: capturing the originating broker application and preparing the HP agreement from that baseline without forcing the user to re-key shared data.
 
 - Devise authentication for internal users.
 - Initial user roles: `payout_reviewer` and `admin`.
 - A broker application capture flow covering applicant, vehicle, and finance details.
-- A dashboard that launches the intake workflow and surfaces recently captured applications.
-- A structured deal baseline that later reconciliation screens can compare against other documents.
+- A follow-on HP agreement step that reuses the captured applicant, vehicle, and finance data, then captures only agreement-specific inputs.
+- A dashboard that launches the intake workflow, surfaces recently captured applications, and shows whether the agreement step is complete.
+- A structured deal baseline and agreement snapshot that later reconciliation screens can compare against other documents.
 
 ## Proposed App Sections
 
@@ -43,16 +44,16 @@ This step focuses on broker application capture, which is the first structured i
 - Automated extraction from uploaded PDFs or scanned documents.
 - The field reconciliation engine itself.
 - FCA, HPI, and bank check integrations.
-- Editing, workflow states, and approval actions after initial capture.
+- Multi-document mismatch resolution, editing workflows, and approval actions after the agreement step.
 - A full permissions matrix beyond the initial role split.
 - Broker or dealer-facing workflows.
 
-These are the next high-value layers, but they depend on first having a reliable way to capture the originating broker submission as normalized data.
+These are still the next high-value layers, but they depend on first having a reliable broker-application baseline plus a follow-on agreement record that avoids duplicate capture.
 
 ## If I Had More Time
 
-1. Implement the reconciliation workspace for one representative deal using the provided source documents.
-2. Add document upload or ingestion so the broker application can be compared directly against the HP agreement, invoice, and mandate.
+1. Implement a richer reconciliation workspace for one representative deal using the provided source documents.
+2. Add document upload or ingestion so the broker application and HP agreement can be compared directly against the invoice, supplier declaration, and mandate.
 3. Build reviewer actions for approve, hold, and escalate with an audit timeline.
 4. Introduce Pundit policies and tighter account provisioning once the user journeys are clearer.
 
@@ -80,4 +81,4 @@ docker compose run --rm app bin/bundler-audit
 
 ## Current Status
 
-The repo currently implements authentication, roles, broker application capture, and a dashboard entry point into that workflow. The reconciliation engine, document comparisons, exception handling, and operational decisioning tools are still to be built in the next steps.
+The repo currently implements authentication, roles, broker application capture, a follow-on HP agreement step that reuses the captured deal baseline, and a dashboard entry point into that workflow. The full reconciliation engine, document comparisons across all sources, exception handling, and operational decisioning tools are still to be built in the next steps.
