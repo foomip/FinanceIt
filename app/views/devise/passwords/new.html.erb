@@ -1,0 +1,66 @@
+<% content_for :title, "Forgot your password?" %>
+
+<section class="mx-auto max-w-5xl space-y-8">
+  <div class="rounded-3xl border border-slate-200 bg-white px-8 py-10 shadow-sm">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div class="max-w-3xl space-y-3">
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">FinanceIt Access</p>
+        <h1 class="text-4xl font-semibold tracking-tight text-slate-900">Reset access without leaving the workflow behind.</h1>
+        <p class="text-lg text-slate-600">Enter the email address for your FinanceIt account and we will send password reset instructions so you can get back to the dashboard and continue review work.</p>
+      </div>
+
+      <div class="rounded-2xl border border-amber-100 bg-amber-50 px-5 py-4 text-sm text-slate-700 lg:max-w-sm">
+        <p class="font-semibold text-slate-900">Access recovery</p>
+        <p class="mt-2 leading-6">Use the same email address you sign in with so Devise can send the reset instructions to the correct account.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+    <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-semibold text-slate-900">Forgot your password?</h2>
+          <p class="mt-2 text-sm text-slate-600">We will email password reset instructions to the account below.</p>
+        </div>
+        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700">Email delivery</span>
+      </div>
+
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "space-y-6" }) do |form| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+
+        <div>
+          <%= form.label :email, class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= form.email_field :email, autofocus: true, autocomplete: "email", class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <%= form.submit "Send reset instructions", class: "inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800" %>
+          <%= link_to "Back to sign in", new_session_path(resource_name), class: "inline-flex items-center justify-center rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900" %>
+        </div>
+      <% end %>
+    </section>
+
+    <aside class="space-y-4">
+      <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-xl font-semibold text-slate-900">What to expect</h2>
+        <div class="mt-5 space-y-4 text-sm text-slate-600">
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <p class="font-medium text-slate-900">Check your inbox</p>
+            <p class="mt-2">The reset email will be sent to the address on the account if it exists in the system.</p>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <p class="font-medium text-slate-900">Open the secure link</p>
+            <p class="mt-2">Use the reset link from the email to choose a new password and restore access.</p>
+          </div>
+
+          <div class="rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-slate-700">
+            <p class="font-medium text-slate-900">Return to work</p>
+            <p class="mt-2">After resetting the password you can sign back in and continue the broker intake and agreement flow.</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>

@@ -1,0 +1,10 @@
+<% if resource.errors.any? %>
+  <div class="rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-900">
+    <h2 class="font-semibold">Please correct the highlighted fields.</h2>
+    <ul class="mt-3 space-y-1">
+      <% resource.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
