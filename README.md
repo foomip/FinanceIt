@@ -1,6 +1,6 @@
-# InsureIt
+# FinanceIt
 
-InsureIt is a Rails prototype for an internal motor finance reconciliation tool. The product goal is to reduce payout administration work by automatically comparing the key fields across deal documents and surfacing only the deals that need human attention.
+FinanceIt is a Rails prototype for an internal motor finance reconciliation tool. The product goal is to reduce payout administration work by automatically comparing the key fields across deal documents and surfacing only the deals that need human attention.
 
 ## Jobs To Be Done
 
@@ -67,8 +67,8 @@ docker compose up -d
 
 Open `http://localhost:3000` and sign in with one of the seeded users:
 
-- `admin@insureit.local` / `password123`
-- `reviewer@insureit.local` / `password123`
+- `admin@financeit.local` / `password123`
+- `reviewer@financeit.local` / `password123`
 
 ## Verification
 

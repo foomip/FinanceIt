@@ -10,14 +10,14 @@
 
 User.reset_column_information
 
-User.find_or_initialize_by(email: "admin@insureit.local").tap do |user|
+User.find_or_initialize_by(email: "admin@financeit.local").tap do |user|
   user.password = "password123"
   user.password_confirmation = "password123"
   user[:role] = 1
   user.save!
 end
 
-User.find_or_initialize_by(email: "reviewer@insureit.local").tap do |user|
+User.find_or_initialize_by(email: "reviewer@financeit.local").tap do |user|
   user.password = "password123"
   user.password_confirmation = "password123"
   user[:role] = 0
