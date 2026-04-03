@@ -1,0 +1,38 @@
+<section class="w-full space-y-8">
+  <div class="rounded-3xl border border-slate-200 bg-white px-8 py-10 shadow-sm">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+      <div class="max-w-2xl space-y-4">
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">InsureIt Prototype</p>
+        <div class="space-y-3">
+          <h1 class="text-4xl font-semibold tracking-tight text-slate-900">Payout review, reduced to the work that matters.</h1>
+          <p class="text-lg text-slate-600">This first authenticated shell is designed for internal operations users who need a clear starting point before deal-level reconciliation screens are built.</p>
+        </div>
+      </div>
+
+      <aside class="rounded-2xl border border-sky-100 bg-sky-50 px-5 py-4 text-sm text-slate-700 lg:w-72">
+        <p class="font-semibold text-slate-900">Signed in as</p>
+        <p class="mt-2 break-all font-medium"><%= current_user.email %></p>
+        <p class="mt-3 inline-flex rounded-full bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">
+          <%= current_user.role_name.humanize %>
+        </p>
+      </aside>
+    </div>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-2">
+    <% @sections.each do |section| %>
+      <article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div class="flex items-center justify-between gap-4">
+          <h2 class="text-xl font-semibold text-slate-900"><%= section[:title] %></h2>
+          <span class="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-amber-800"><%= section[:status] %></span>
+        </div>
+        <p class="mt-4 text-sm leading-6 text-slate-600"><%= section[:summary] %></p>
+      </article>
+    <% end %>
+  </div>
+
+  <div class="rounded-3xl border border-slate-200 bg-slate-950 px-8 py-8 text-white shadow-sm">
+    <h2 class="text-2xl font-semibold">Immediate objective</h2>
+    <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-300">For the take-home, the prototype should make it obvious which deals can move through automatically, which ones need a human, and why. Authentication and role-aware navigation are the first guardrails for that workflow.</p>
+  </div>
+</section>
