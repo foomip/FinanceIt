@@ -12,9 +12,9 @@
 ## Build And Test
 - Initial setup: `docker compose run --rm app bin/setup` (installs gems, sets up DB, seeds)
 - Local development: `docker compose up -d  `
-- Run tests: `docker compose run --rm app rspec`
+- Run tests: `docker compose run --rm app bundle exec rspec`
 - Run the full local CI workflow before broad or cross-cutting changes: `docker compose run --rm app bin/ci`
-- Lint and security checks are first-class in this repo. Use `docker compose run --rm app bin/rubocop`, `docker compose run --rm app bin/brakeman --quiet --no-pager --exit-on-warn --exit-on-error`, `docker compose run --rm app bin/bundler-audit`, and `docker compose run --rm app bin/importmap audit` when your change touches relevant areas.
+- Lint and security checks are first-class in this repo. Use `docker compose run --rm app  bundle exec rubocop`, `docker compose run --rm app  bundle exec brakeman --quiet --no-pager --exit-on-warn --exit-on-error`, `docker compose run --rm app bin/bundler-audit`, and `docker compose run --rm app bin/importmap audit` when your change touches relevant areas.
 
 ## Conventions
 - Prefer Rails generators and conventional structure over custom wiring.
