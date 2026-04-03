@@ -30,7 +30,7 @@ RSpec.describe 'Dashboard', type: :request do
 
       get '/', headers: modern_browser_headers
 
-      expect(response.body).to include('Payout review, reduced to the work that matters.')
+      expect(response.body).to include('Start with structured intake, then automate everything after it.')
     end
 
     it 'renders the user role for authenticated users' do
@@ -39,6 +39,25 @@ RSpec.describe 'Dashboard', type: :request do
       get '/', headers: modern_browser_headers
 
       expect(response.body).to include('Admin')
+    end
+
+    it 'links users to broker application capture' do
+      sign_in user
+
+      get '/', headers: modern_browser_headers
+
+      expect(response.body).to include('Capture broker application')
+      expect(response.body).to include('Broker application capture')
+    end
+
+    it 'shows recent broker applications when present' do
+      sign_in user
+      create(:broker_application, :with_details, application_reference: 'AF-2026-00417')
+
+      get '/', headers: modern_browser_headers
+
+      expect(response.body).to include('AF-2026-00417')
+      expect(response.body).to include('Adam Piers')
     end
   end
 end
