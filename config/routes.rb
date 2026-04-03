@@ -21,5 +21,7 @@ Rails.application.routes.draw do
 
   get "dashboard" => "dashboard#index", as: :dashboard
 
-  resources :broker_applications, only: %i[new create show]
+  resources :broker_applications, only: %i[new create show] do
+    resource :hp_agreement, only: %i[new create show], controller: :broker_hp_agreements
+  end
 end
