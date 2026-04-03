@@ -1,0 +1,45 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM ruby:4.0.2-slim
+
+        WORKDIR /rails
+
+        RUN apt-get update -qq && \
+            apt-get install --no-install-recommends -y \
+              build-essential \
+              curl \
+              git \
+              libvips \
+              libyaml-dev \
+              pkg-config \
+              sqlite3 && \
+            rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+        ENV BUNDLE_PATH=/usr/local/bundle
+
+    command: >-
+      sh -lc "bundle check || bundle install &&
+      if ! gem list foreman -i --silent; then gem install foreman; fi &&
+      bin/rails db:prepare &&
+      foreman start -f Procfile.dev web='bin/rails server -b 0.0.0.0 -p ${PORT:-3000}'"
+    environment:
+      BUNDLE_PATH: /usr/local/bundle
+      PORT: 3000
+      RAILS_ENV: development
+      RUBY_DEBUG_LAZY: "true"
+      RUBY_DEBUG_OPEN: "true"
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/rails
+      - bundle:/usr/local/bundle
+      - rails_storage:/rails/storage
+
+volumes:
+  bundle:
+  rails_storage:
