@@ -1,0 +1,79 @@
+<% content_for :title, "Sign in" %>
+
+<section class="mx-auto max-w-5xl space-y-8">
+  <div class="rounded-3xl border border-slate-200 bg-white px-8 py-10 shadow-sm">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div class="max-w-3xl space-y-3">
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">FinanceIt Access</p>
+        <h1 class="text-4xl font-semibold tracking-tight text-slate-900">Sign in to continue the reconciliation workflow.</h1>
+        <p class="text-lg text-slate-600">Use your FinanceIt account to return to the dashboard, resume broker application capture, and continue the HP agreement handoff without losing context.</p>
+      </div>
+
+      <div class="rounded-2xl border border-sky-100 bg-sky-50 px-5 py-4 text-sm text-slate-700 lg:max-w-sm">
+        <p class="font-semibold text-slate-900">Prototype environment</p>
+        <p class="mt-2 leading-6">Authentication protects the structured intake flow and keeps each captured deal linked to the signed-in reviewer.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+    <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div class="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-semibold text-slate-900">Account sign in</h2>
+          <p class="mt-2 text-sm text-slate-600">Enter the email and password for your reviewer account.</p>
+        </div>
+        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700">Secure access</span>
+      </div>
+
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-6" }) do |form| %>
+        <div>
+          <%= form.label :email, class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= form.email_field :email, autofocus: true, autocomplete: "email", class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+
+        <div>
+          <%= form.label :password, class: "mb-2 block text-sm font-medium text-slate-700" %>
+          <%= form.password_field :password, autocomplete: "current-password", class: "w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-200" %>
+        </div>
+
+        <% if devise_mapping.rememberable? %>
+          <label class="inline-flex items-center gap-3 text-sm font-medium text-slate-700">
+            <%= form.check_box :remember_me, class: "h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-sky-200" %>
+            <span>Remember me</span>
+          </label>
+        <% end %>
+
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <%= form.submit "Log in", class: "inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800" %>
+
+          <% if devise_mapping.recoverable? %>
+            <%= link_to "Forgot your password?", new_password_path(resource_name), class: "inline-flex items-center justify-center rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900" %>
+          <% end %>
+        </div>
+      <% end %>
+    </section>
+
+    <aside class="space-y-4">
+      <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-xl font-semibold text-slate-900">What happens after sign in</h2>
+        <div class="mt-5 space-y-4 text-sm text-slate-600">
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <p class="font-medium text-slate-900">Broker intake</p>
+            <p class="mt-2">Capture the originating application as structured data instead of working from free-form documents.</p>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+            <p class="font-medium text-slate-900">HP agreement reuse</p>
+            <p class="mt-2">Carry forward the baseline fields and ask only for agreement-only values on the next step.</p>
+          </div>
+
+          <div class="rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-slate-700">
+            <p class="font-medium text-slate-900">Reviewer continuity</p>
+            <p class="mt-2">Stay anchored to recent captured deals and return to in-progress work with less re-entry.</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
