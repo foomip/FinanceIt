@@ -65,6 +65,23 @@ docker compose run --rm app bin/rails db:seed
 docker compose up -d
 ```
 
+## Test Deploy With Docker Compose
+
+The default [docker-compose.yml](docker-compose.yml) is development-only. It explicitly sets `RAILS_ENV=development` and starts `Procfile.dev`.
+
+For a production-mode test deploy with Docker Compose, use the production override file instead:
+
+```bash
+docker compose -f docker-compose.production.yml up -d --build
+```
+
+Required environment for that deploy:
+
+- `RAILS_MASTER_KEY`
+- `APP_HOST` and `APP_HOSTS` if the hostname differs from `financeit.i2r.tech`
+
+That compose file builds from the production [Dockerfile](Dockerfile), runs Rails in `production`, and persists the SQLite databases and storage files in the `rails_storage` volume.
+
 Open `http://localhost:3000` and sign in with one of the seeded users:
 
 - `admin@financeit.local` / `password123`
