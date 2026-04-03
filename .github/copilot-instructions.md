@@ -26,3 +26,9 @@
 - Local and container Ruby versions should stay aligned with `.ruby-version` and the `RUBY_VERSION` value in `Dockerfile`.
 - Do not commit secrets or rely on missing credentials being present. Production and some deploy flows expect `config/master.key` or `RAILS_MASTER_KEY`, while encrypted credentials live in `config/credentials.yml.enc`.
 - `config/initializers/content_security_policy.rb` is currently commented out. Be deliberate if a change depends on CSP behavior.
+
+## Commit message prefixes:
+- feat: for code adding a new feature
+- fix: for syntax errors or logic fixes
+- refactor: for changes that improve code layout and readability
+- chore: for maintenance, config updates, or version bumps (e.g., gems)
