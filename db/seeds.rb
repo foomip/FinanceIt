@@ -7,3 +7,19 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+User.reset_column_information
+
+User.find_or_initialize_by(email: "admin@insureit.local").tap do |user|
+  user.password = "password123"
+  user.password_confirmation = "password123"
+  user[:role] = 1
+  user.save!
+end
+
+User.find_or_initialize_by(email: "reviewer@insureit.local").tap do |user|
+  user.password = "password123"
+  user.password_confirmation = "password123"
+  user[:role] = 0
+  user.save!
+end
