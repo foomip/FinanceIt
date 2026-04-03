@@ -5,7 +5,7 @@
         <p class="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">InsureIt Prototype</p>
         <div class="space-y-3">
           <h1 class="text-4xl font-semibold tracking-tight text-slate-900">Start with structured intake, then automate everything after it.</h1>
-          <p class="text-lg text-slate-600">The first live slice captures the broker application as normalized deal data. That removes re-keying later and gives the reconciliation engine a trustworthy baseline to compare against the agreement, invoice, mandate, and external checks.</p>
+          <p class="text-lg text-slate-600">The live prototype now covers structured intake plus an HP agreement step that reuses the captured deal baseline. That keeps data entry light and moves the user closer to a document-by-document reconciliation workspace.</p>
         </div>
 
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -28,6 +28,12 @@
           <p class="mt-3 text-4xl font-semibold"><%= @recent_broker_applications.size %></p>
           <p class="mt-2 text-sm text-slate-300">Recent submissions visible on this dashboard for quick return-to-work context.</p>
         </div>
+
+        <div class="rounded-2xl border border-emerald-100 bg-emerald-50 px-5 py-4 text-sm text-slate-700">
+          <p class="font-semibold text-slate-900">HP agreements prepared</p>
+          <p class="mt-2 text-3xl font-semibold text-emerald-700"><%= @captured_hp_agreements_count %></p>
+          <p class="mt-2">Each agreement reuses the original application data and only asks for agreement-only fields.</p>
+        </div>
       </aside>
     </div>
   </div>
@@ -49,7 +55,7 @@
       <div class="flex items-center justify-between gap-4">
         <div>
           <h2 class="text-2xl font-semibold text-slate-900">Recent broker applications</h2>
-          <p class="mt-2 text-sm text-slate-600">Internal users should be able to resume the most recent deals without searching through raw documents.</p>
+          <p class="mt-2 text-sm text-slate-600">Resume intake, continue the HP agreement step, or review which deals are ready for richer reconciliation screens.</p>
         </div>
         <%= link_to "New capture", new_broker_application_path, class: "inline-flex items-center justify-center rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900" %>
       </div>
@@ -57,19 +63,36 @@
       <% if @recent_broker_applications.any? %>
         <div class="mt-6 space-y-4">
           <% @recent_broker_applications.each do |broker_application| %>
-            <%= link_to broker_application_path(broker_application), class: "block rounded-2xl border border-slate-200 px-5 py-4 transition hover:border-sky-300 hover:bg-sky-50/50" do %>
-              <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <article class="rounded-2xl border border-slate-200 px-5 py-4 transition hover:border-sky-300 hover:bg-sky-50/50">
+              <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <p class="text-sm font-semibold uppercase tracking-[0.18em] text-sky-700"><%= broker_application.application_reference %></p>
-                  <p class="mt-2 text-lg font-semibold text-slate-900"><%= [broker_application.broker_applicant&.first_name, broker_application.broker_applicant&.surname].compact.join(" ") %></p>
-                  <p class="mt-1 text-sm text-slate-500"><%= broker_application.broker_vehicle&.make_model %> · <%= broker_application.broker_vehicle&.registration %></p>
+                  <div class="flex flex-wrap items-center gap-3">
+                    <p class="text-sm font-semibold uppercase tracking-[0.18em] text-sky-700"><%= broker_application.application_reference %></p>
+                    <% if broker_application.broker_hp_agreement.present? %>
+                      <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-800">HP agreement ready</span>
+                    <% else %>
+                      <span class="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-amber-800">Needs HP agreement</span>
+                    <% end %>
+                  </div>
+                  <p class="mt-2 text-lg font-semibold text-slate-900"><%= broker_application.applicant_full_name %></p>
+                  <p class="mt-1 text-sm text-slate-500"><%= broker_application.vehicle_label %></p>
                 </div>
 
-                <div class="text-sm text-slate-500">
-                  Captured <%= time_ago_in_words(broker_application.created_at) %> ago
+                <div class="flex flex-col items-start gap-3 md:items-end">
+                  <div class="text-sm text-slate-500">
+                    Captured <%= time_ago_in_words(broker_application.created_at) %> ago
+                  </div>
+                  <div class="flex flex-wrap gap-3">
+                    <%= link_to "View intake", broker_application_path(broker_application), class: "inline-flex items-center justify-center rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900" %>
+                    <% if broker_application.broker_hp_agreement.present? %>
+                      <%= link_to "View HP agreement", broker_application_hp_agreement_path(broker_application), class: "inline-flex items-center justify-center rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800" %>
+                    <% else %>
+                      <%= link_to "Start HP agreement", new_broker_application_hp_agreement_path(broker_application), class: "inline-flex items-center justify-center rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800" %>
+                    <% end %>
+                  </div>
                 </div>
               </div>
-            <% end %>
+            </article>
           <% end %>
         </div>
       <% else %>

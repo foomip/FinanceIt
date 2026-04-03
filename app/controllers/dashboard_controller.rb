@@ -1,8 +1,9 @@
 class DashboardController < ApplicationController
   def index
-    @recent_broker_applications = BrokerApplication.includes(:broker_applicant, :broker_vehicle)
+    @recent_broker_applications = BrokerApplication.includes(:broker_applicant, :broker_vehicle, :broker_hp_agreement)
       .order(created_at: :desc)
       .limit(5)
+    @captured_hp_agreements_count = BrokerHpAgreement.count
 
     @sections = [
       {
@@ -12,8 +13,8 @@ class DashboardController < ApplicationController
       },
       {
         title: "Reconciliation workspace",
-        summary: "Compare source values, understand mismatches, and confirm whether a discrepancy blocks payout.",
-        status: "Next"
+        summary: "Reuse the broker application as the baseline, add HP agreement details without re-keying shared fields, and prepare the deal for field-by-field checks.",
+        status: "Live"
       },
       {
         title: "Exceptions and escalation",

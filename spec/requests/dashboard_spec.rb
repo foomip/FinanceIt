@@ -48,6 +48,7 @@ RSpec.describe 'Dashboard', type: :request do
 
       expect(response.body).to include('Capture broker application')
       expect(response.body).to include('Broker application capture')
+      expect(response.body).to include('HP agreements prepared')
     end
 
     it 'shows recent broker applications when present' do
@@ -58,6 +59,7 @@ RSpec.describe 'Dashboard', type: :request do
 
       expect(response.body).to include('AF-2026-00417')
       expect(response.body).to include('Adam Piers')
+      expect(response.body).to include('Start HP agreement')
     end
   end
 end
