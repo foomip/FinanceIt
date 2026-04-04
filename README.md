@@ -56,13 +56,20 @@ These are still the next high-value layers, but they depend on first having a re
 2. Add document upload or ingestion so the broker application and HP agreement can be compared directly against the invoice, supplier declaration, and mandate.
 3. Build reviewer actions for approve, hold, and escalate with an audit timeline.
 4. Spend more time refining the UI logic and making the document-to-document flow clearer, especially how the broker application feeds the HP agreement and how later documents would inherit, compare against, and challenge that baseline.
-5. Introduce Pundit policies and tighter account provisioning once the user journeys are clearer.
+5. Spend more time specifying the tests up front so the workflow and domain rules are pinned down more clearly, which would make the business logic safer to evolve as reconciliation and exception handling become more complex.
+6. Introduce Pundit policies and tighter account provisioning once the user journeys are clearer.
 
 ## LightService Approach
 
 If I took this prototype further, I would also lean more heavily on LightService actions and organizers to document and structure the business logic. That would give the app a clearer home for workflows such as building a broker application, deriving an HP agreement snapshot from that baseline, validating shared fields, and preparing the comparison inputs for reconciliation.
 
 Using organizers for the end-to-end workflows and actions for each discrete step would make the intent of the domain logic easier to read, test, and extend without pushing more orchestration into controllers or models. It would also provide a better foundation for the next stages of the app, where reconciliation rules, exception routing, audit events, and approval decisions will become more complex.
+
+## AI-Assisted Build
+
+AI was used as a delivery aid throughout the prototype to help accelerate scaffolding, iterate on UI and flow ideas, and tighten up implementation details across Rails, forms, and the README itself. It was most useful for speeding up repetitive construction work and helping explore different ways to express the workflow, but the app direction, product trade-offs, and final decisions about the document flow and data model still needed deliberate human judgment.
+
+If I had more time, I would pair that faster AI-assisted delivery with more explicit test design and tighter service boundaries so the business rules were captured more rigorously rather than only implemented quickly. That would make the next layer of reconciliation logic easier to trust, refactor, and extend.
 
 ## Local Setup
 
